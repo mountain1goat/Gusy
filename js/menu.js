@@ -7,6 +7,11 @@ const menu = function () {
             const card = document.createElement('div');
             card.classList.add('card');
             card.innerHTML = createCard(item);
+
+			card.querySelector('.button-add-cart').addEventListener('click', ()=>{
+				addToBasket(item)
+			});
+
             cardsMenu.append(card);
         });
     }
@@ -27,7 +32,7 @@ const menu = function () {
 			</div>
 		<!-- /.card-info -->
 		<div class="card-buttons">
-			<button class="button button-primary button-add-cart">
+			<button class="button button-primary button-add-cart" oncklick=>
 				<span class="button-card-text">В корзину</span>
 				<span class="button-cart-svg"></span>
 			</button>
@@ -37,6 +42,20 @@ const menu = function () {
     `;
     }
 
+	const addToBasket = (basketItem) => {
+		const basket = JSON.parse(localStorage.getItem('basket')) || [];
+		
+		const index = basket.findIndex(item => basketItem.id === item.id);
+		if (index >= 0) {
+			basket[index].count++;
+		}else {
+			basketItem.count = 1;
+			basket.push(basketItem);
+		}
+
+		localStorage.setItem('basket', JSON.stringify(basket));
+		// localStorage.removeItem('basket');
+	}
     createManyCard(cards);
 }
 export { menu }
